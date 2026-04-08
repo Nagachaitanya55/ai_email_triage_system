@@ -1,15 +1,43 @@
-import gradio as gr
-from inference import query
+from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import Optional, List
 
-def triage_email(content):
-    return query(f"Triage this email: {content}")
+app = FastAPI()
 
-demo = gr.Interface(
-    fn=triage_email,
-    inputs=gr.Textbox(label="Email Content"),
-    outputs=gr.Textbox(label="Triage Result"),
-    title="Email Triage AI"
-)
+# ---------- Dummy Models ----------
+class ResetRequest(BaseModel):
+    task_id: str = "basic"
+    max_steps: int = 1
 
-if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0", server_port=7860)
+class Action(BaseModel):
+    message: str
+
+
+# ---------- ROUTES ----------
+@app.get("/")
+def home():
+    return {"status": "running"}
+
+@app.post("/reset")
+def reset(req: ResetRequest):
+    return {
+        "observation": {
+            "email": "test email"
+        },
+        "reward": 0.0,
+        "done": False,
+        "info": {}
+    }
+
+@app.post("/step")
+def step(action: Action):
+    return {
+        "observation": {"email": "processed"},
+        "reward": 1.0,
+        "done": True,
+        "info": {}
+    }
+
+@app.get("/state")
+def state():
+    return {"state": "ok"}
