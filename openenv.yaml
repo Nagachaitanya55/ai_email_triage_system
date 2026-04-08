@@ -1,0 +1,4 @@
+name: email-triage-ai
+version: 1.0.0
+runtime: python3.10
+entrypoint: python app.py

@@ -1,0 +1,5 @@
+{
+  "name": "AI Email Triage System",
+  "description": "An intelligent email management environment using the OpenEnv framework to evaluate LLM-based triage agents.",
+  "requestFramePermissions": []
+}
